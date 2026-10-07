@@ -1,0 +1,30 @@
+points-per-mix: 10 # очки за одно успешное скрещивание
+
+list:
+  1:
+    points: 0 # сколько очков нужно для уровня
+    slots: 5 # сколько слотов под зелья открыто
+    discount: 0 # скидка, %
+    fail-reduction: 0 # на сколько % ниже шанс неудачи
+  2:
+    points: 50
+    slots: 8
+    discount: 5
+    fail-reduction: 5
+  3:
+    points: 150
+    slots: 10
+    discount: 10
+    fail-reduction: 10
+  4:
+    points: 400
+    slots: 12
+    discount: 15
+    fail-reduction: 15
+  5:
+    points: 1000
+    slots: 15
+    discount: 20
+    fail-reduction: 25
+
+config-version: 1 #не трогать!!!

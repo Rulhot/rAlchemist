@@ -1,0 +1,32 @@
+settings:
+  debug: false
+  metrics: true
+
+command:
+  main: alchemist
+  aliases: [ alchemy ]
+
+# Плата за скрещивание. Можно несколько сразу: добавьте ещё один блок "- provider: ..."
+price:
+  costs:
+    - provider: VAULT # VAULT, COINSENGINE, PLAYERPOINTS
+      currency: money # ID валюты, нужен только для COINSENGINE
+      base: 3000 # базовая цена
+      per-potion: 0 # доплата за каждое зелье
+      per-effect: 250 # доплата за каждый эффект в результате
+
+sounds:
+  click:
+    key: "minecraft:ui.button.click"
+    volume: 0.5
+    pitch: 1.0
+  mix-success:
+    key: "minecraft:block.brewing_stand.brew"
+    volume: 1.0
+    pitch: 1.0
+  mix-fail:
+    key: "minecraft:block.note_block.bass"
+    volume: 1.0
+    pitch: 1.0
+
+config-version: 1 #не трогать!!!

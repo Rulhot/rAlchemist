@@ -1,0 +1,94 @@
+title: "<dark_gray>• Цвет зелья"
+size: 45
+
+color-item:
+  material: POTION
+  item-flags: [HIDE_ADDITIONAL_TOOLTIP]
+  name: "{color}"
+  lore:
+    - ""
+    - " <white>Нажмите, чтобы выбрать."
+    - ""
+
+colors:
+  red:
+    slot: 12
+    color: "#D7706C"
+    name: "<#D7706C>Красный"
+  orange:
+    slot: 13
+    color: "#D9A26B"
+    name: "<#D9A26B>Оранжевый"
+  yellow:
+    slot: 14
+    color: "#E6C15A"
+    name: "<#E6C15A>Жёлтый"
+  lilac:
+    slot: 20
+    color: "#B7A3E0"
+    name: "<#B7A3E0>Сиреневый"
+  pink:
+    slot: 21
+    color: "#E0A3C8"
+    name: "<#E0A3C8>Розовый"
+  green:
+    slot: 22
+    color: "#8CC77E"
+    name: "<#8CC77E>Зелёный"
+  aqua:
+    slot: 23
+    color: "#7FC4B8"
+    name: "<#7FC4B8>Бирюзовый"
+  purple:
+    slot: 24
+    color: "#8E6BC9"
+    name: "<#8E6BC9>Фиолетовый"
+  blue:
+    slot: 30
+    color: "#6F86D6"
+    name: "<#6F86D6>Синий"
+  light-blue:
+    slot: 31
+    color: "#8FB8DE"
+    name: "<#8FB8DE>Голубой"
+  white:
+    slot: 32
+    color: "#FFFFFF"
+    name: "<white>Белый"
+
+# action: NONE, MIX, COLOR, CUSTOM_COLOR, RESET_COLOR, BACK, CLOSE
+buttons:
+  frame:
+    material: GRAY_STAINED_GLASS_PANE
+    hide-tooltip: true
+    slots: [0-11, 15-19, 25-29, 33-38, 42-44]
+  custom:
+    material: NAME_TAG
+    slot: 39
+    action: CUSTOM_COLOR
+    name: "<white>Свой цвет"
+    lore:
+      - ""
+      - " <#8FB8DE>Свой цвет <white>- любой оттенок,"
+      - " <white>которого нет в списке."
+      - ""
+      - " <#8FB8DE>▌ <white>Формат: <#8FB8DE>#RRGGBB"
+      - ""
+      - " <white>Нажмите и введите команду из чата."
+      - ""
+  back:
+    material: BRUSH
+    slot: 40
+    action: BACK
+    name: "<white>Вернуться к алхимику"
+  reset:
+    material: MILK_BUCKET
+    slot: 41
+    action: RESET_COLOR
+    name: "<white>Сбросить цвет"
+    lore:
+      - ""
+      - " <#D7706C>▌ <white>Вернуть обычный цвет зелья."
+      - ""
+
+config-version: 1 #не трогать!!!

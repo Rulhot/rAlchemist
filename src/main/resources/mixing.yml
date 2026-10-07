@@ -1,0 +1,26 @@
+min-potions: 2
+allow-crossed: false # можно ли скрещивать уже скрещенные зелья
+allow-duplicates: false # можно ли класть зелья с одинаковым эффектом
+combine-essences: false # можно ли накладывать эссенции на скрещенные зелья и скрещивать зелья после эссенций
+# Эффекты из одной группы нельзя совмещать в одном зелье. Названия как в /effect
+incompatible:
+  - [strength, resistance]
+  - [regeneration, instant_health]
+
+# Шанс неудачи в процентах = base-chance + chance-per-effect * число эффектов, но не больше max-chance
+failure:
+  mode: SPOIL # BURN - зелья сгорают, SPOIL - выходит испорченное зелье
+  base-chance: 0
+  chance-per-effect: 5
+  max-chance: 50
+
+limits:
+  cooldown-seconds: 0 # пауза между скрещиваниями, 0 - без паузы
+  daily-mixes: 0 # скрещиваний в сутки, 0 - без лимита
+  # Свои лимиты по праву ralchemist.limits.<имя>. Если прав несколько, берётся лучшее для игрока
+  groups:
+    vip:
+      cooldown-seconds: 0
+      daily-mixes: 0
+
+config-version: 1 #не трогать!!!

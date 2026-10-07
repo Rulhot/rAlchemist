@@ -1,0 +1,94 @@
+crossed-potion:
+  model-data: 0
+  name: "<white>Скрещенное зелье"
+  lore: []
+
+spoiled-potion:
+  model-data: 0
+  name: "<white>Испорченное зелье"
+  lore:
+    - ""
+    - " <#D7706C>▌ <white>Что-то пошло не так..."
+    - ""
+  effects: # эффект:уровень:секунды
+    - poison:1:15
+    - nausea:1:10
+
+essence:
+  material: AMETHYST_SHARD
+  glow: false
+  model-data: 0
+  duration-minutes: 5 # до скольких минут продлевает эффекты
+  level-cost: 1
+  name: "<white>Эссенция времени"
+  lore:
+    - ""
+    - " <#7FC4B8>Эссенция <white>- увеличивает время"
+    - " <white>эффектов любого зелья."
+    - ""
+    - " <#7FC4B8><u>▌</u> <white>Время эффектов: до <#7FC4B8>{minutes} мин."
+    - " <#7FC4B8>▌ <white>Скрещивание в наковальне."
+    - ""
+
+power-essence:
+  material: BLAZE_POWDER
+  glow: true
+  model-data: 0
+  max-level: 2 # выше этого уровня эффект не поднимается
+  ignored-effects: [night_vision, invisibility, fire_resistance, water_breathing, slow_falling, glowing] # эти эффекты не усиливаются
+  level-cost: 3
+  name: "<white>Эссенция силы"
+  lore:
+    - ""
+    - " <#D9A26B>Эссенция <white>- усиливает эффекты"
+    - " <white>любого зелья на один уровень."
+    - ""
+    - " <#D9A26B><u>▌</u> <white>Максимальный уровень: <#D9A26B>{max}"
+    - " <#D9A26B>▌ <white>Скрещивание в наковальне."
+    - ""
+
+stealth-essence:
+  material: PHANTOM_MEMBRANE
+  glow: true
+  model-data: 0
+  required-effects: [invisibility] # на какие зелья действует, [] - на любые или invisibility, и новый effect
+  level-cost: 3
+  name: "<white>Эссенция скрытности"
+  lore:
+    - ""
+    - " <#8FB8DE>Эссенция <white>- полностью скрывает"
+    - " <white>частицы зелья невидимости."
+    - ""
+    - " <#8FB8DE>▌ <white>Скрещивание в наковальне."
+    - ""
+
+mystery-essence:
+  material: INK_SAC
+  glow: true
+  model-data: 0
+  level-cost: 1
+  name: "<white>Эссенция тайны"
+  lore:
+    - ""
+    - " <#9FA8DA>Эссенция <white>- скрывает эффекты зелья"
+    - " <white>в описании, пока его не выпьют."
+    - ""
+    - " <#9FA8DA>▌ <white>Скрещивание в наковальне."
+    - ""
+
+eternity-essence:
+  material: NETHER_STAR
+  glow: true
+  model-data: 0
+  level-cost: 30
+  name: "<white>Эссенция вечности"
+  lore:
+    - ""
+    - " <#FF6B35>Эссенция <white>- делает положительные"
+    - " <white>эффекты зелья бесконечными."
+    - ""
+    - " <#FF6B35><u>▌</u> <white>Эффект пропадёт после смерти или молока."
+    - " <#FF6B35>▌ <white>Скрещивание в наковальне."
+    - ""
+
+config-version: 1 #не трогать!!!

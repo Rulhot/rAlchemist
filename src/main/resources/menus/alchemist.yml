@@ -1,0 +1,79 @@
+title: "<dark_gray>• Алхимик"
+size: 45
+
+input-slots: [20-24, 11-15, 29-33]
+result-slot: 26 # -1 - выдавать зелье сразу в инвентарь
+preview-slot: 26 # где показывать будущее зелье до оплаты, -1 - не показывать
+
+locked-slot:
+  material: IRON_BARS
+  name: "<white>Слот закрыт"
+  lore:
+    - ""
+    - " <#D7706C>▌ <white>Откроется на уровне <#D7706C>{level}"
+    - ""
+
+preview-lore:
+  - ""
+  - " <#8FB8DE>Предпросмотр <white>- так будет выглядеть"
+  - " <white>зелье после скрещивания."
+  - ""
+  - " <#8FB8DE><u>▌</u> <white>Стоимость: {price}"
+  - " <#8FB8DE>▌ <white>Шанс неудачи: <#D7706C>{chance}%"
+  - ""
+
+# action: NONE, MIX, COLOR, CUSTOM_COLOR, RESET_COLOR, BACK, CLOSE
+buttons:
+  frame:
+    material: GRAY_STAINED_GLASS_PANE
+    hide-tooltip: true
+    slots: [0-8, 10, 16-17, 19, 25, 28, 34-44]
+  mix:
+    material: BREWING_STAND
+    slot: 9
+    action: MIX
+    name: "<white>Скрестить зелья"
+    lore:
+      - ""
+      - " <#8CC77E>Скрещивание <white>- все зелья из центра"
+      - " <white>объединятся в одно с их эффектами."
+      - ""
+      - " <white>Нажмите, чтобы скрестить."
+      - ""
+  info:
+    material: OAK_HANGING_SIGN
+    slot: 18
+    name: "<white>Полезная информация <gray>[<#FF9A6C>{level} LvL<gray>]"
+    lore:
+      - ""
+      - " <#FF6B35>Алхимик <white>- это место создания"
+      - " <white>скрещенных зелий с эффектами."
+      - ""
+      - " <#FF6B35><u>▌</u> <white>Скрещивать можно только"
+      - " <#FF6B35><u>▌</u> <white>положительные зелья."
+      - " <#FF6B35><u>▌</u> <white>Положите зелья в слоты по центру"
+      - " <#FF6B35>▌ <white>и нажмите <#8CC77E>Скрестить зелья<white>."
+      - ""
+      - " <#FF6B35><u>▌</u> <white>Очки алхимика: <#8FB8DE>{points}/{points_needed}"
+      - " <#FF6B35><u>▌</u> <white>Скидка: <#8CC77E>{discount}%"
+      - " <#FF6B35>▌ <white>Осталось сегодня: <#D9A26B>{left}"
+      - ""
+      - " <white>Будущее зелье видно в слоте справа."
+      - ""
+  color:
+    material: POTION
+    item-flags: [HIDE_ADDITIONAL_TOOLTIP]
+    slot: 27
+    action: COLOR
+    name: "<white>Цвет зелья"
+    lore:
+      - ""
+      - " <#D9A26B>Цвет <white>- как будет выглядеть"
+      - " <white>готовое зелье."
+      - ""
+      - " <#D9A26B>▌ <white>Сейчас: {color}"
+      - ""
+      - " <white>Нажмите, чтобы выбрать."
+      - ""
+
+config-version: 1 #не трогать!!!
