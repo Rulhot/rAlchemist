@@ -1,10 +1,10 @@
 name: rAlchemist
-version: '1.0'
+version: '1.1'
 main: ru.rulhot.rAlchemist.RAlchemist
 api-version: '1.21.4'
 folia-supported: true
 authors: [ Rulhot ]
-softdepend: [ Vault, CoinsEngine, PlayerPoints ]
+softdepend: [ Vault, BVault, CoinsEngine, PlayerPoints ]
 
 libraries:
   - com.j256.ormlite:ormlite-jdbc:6.1

@@ -105,17 +105,23 @@ public final class PointsSubCommand implements SubCommand {
             @NotNull String[] args
     ) {
         boolean query = args.length > 0 && args[0].equalsIgnoreCase(QUERY);
-        Stream<String> options;
-        if (args.length == 1) {
-            options = Stream.of(ADD, SET, QUERY);
-        } else if (args.length == 2) {
-            options = Bukkit.getOnlinePlayers().stream().map(Player::getName);
-        } else if (args.length == (query ? 3 : 4)) {
-            options = Stream.of(POINTS, LEVELS);
-        } else {
-            return List.of();
+        switch (args.length) {
+            case 1: {
+                return SubCommand.suggest(Stream.of(ADD, SET, QUERY), args);
+            }
+            case 2: {
+                return SubCommand.suggest(Bukkit.getOnlinePlayers().stream().map(Player::getName), args);
+            }
+            case 3: {
+                return query ? SubCommand.suggest(Stream.of(POINTS, LEVELS), args) : List.of();
+            }
+            case 4: {
+                return query ? List.of() : SubCommand.suggest(Stream.of(POINTS, LEVELS), args);
+            }
+            default: {
+                return List.of();
+            }
         }
-        return SubCommand.suggest(options, args);
     }
 
     private @NotNull Integer added(int points, int amount, boolean levels) {

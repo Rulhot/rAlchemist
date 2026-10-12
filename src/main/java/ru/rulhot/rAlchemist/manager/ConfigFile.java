@@ -14,6 +14,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.AtomicMoveNotSupportedException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Set;
 
 @UtilityClass
@@ -21,6 +25,8 @@ public class ConfigFile {
 
     private final String VERSION_KEY = "config-version";
     private final String PATH_SEPARATOR = ".";
+    private final String TEMPORARY_SUFFIX = ".tmp";
+    private final String BACKUP_SUFFIX = ".bak";
 
     public synchronized @NotNull YamlConfiguration read(@NotNull JavaPlugin plugin, @NotNull String path,
                                                         @NotNull Set<String> livePaths) {
@@ -44,12 +50,27 @@ public class ConfigFile {
             return current;
         }
         YamlConfiguration merged = merge(current, defaults, livePaths);
+        Path file = target.toPath();
+        String backupName = file.getFileName() + BACKUP_SUFFIX;
         try {
-            merged.save(target);
+            Files.copy(file, file.resolveSibling(backupName), StandardCopyOption.REPLACE_EXISTING);
+            writeAtomically(file, merged.saveToString());
+            Logger.info("Файл " + path + " обновлён: добавлены новые ключи, ваши значения сохранены, прежняя версия — "
+                    + backupName);
         } catch (IOException exception) {
             Logger.error("Не удалось сохранить обновлённый " + path, exception);
         }
         return merged;
+    }
+
+    private void writeAtomically(@NotNull Path file, @NotNull String text) throws IOException {
+        Path temporary = file.resolveSibling(file.getFileName() + TEMPORARY_SUFFIX);
+        Files.writeString(temporary, text, StandardCharsets.UTF_8);
+        try {
+            Files.move(temporary, file, StandardCopyOption.ATOMIC_MOVE);
+        } catch (AtomicMoveNotSupportedException exception) {
+            Files.move(temporary, file, StandardCopyOption.REPLACE_EXISTING);
+        }
     }
 
     private boolean hasMissingKeys(@NotNull YamlConfiguration current, @NotNull YamlConfiguration defaults,
@@ -65,6 +86,7 @@ public class ConfigFile {
     private @NotNull YamlConfiguration merge(@NotNull YamlConfiguration current, @NotNull YamlConfiguration defaults,
                                              @NotNull Set<String> livePaths) {
         YamlConfiguration merged = new YamlConfiguration();
+        merged.options().width(Integer.MAX_VALUE);
         merged.options().setHeader(defaults.options().getHeader());
         merged.options().setFooter(defaults.options().getFooter());
         for (String key : defaults.getKeys(true)) {

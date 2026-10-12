@@ -28,6 +28,7 @@ import ru.rulhot.rAlchemist.service.PriceService;
 import ru.rulhot.rAlchemist.service.ProgressService;
 import ru.rulhot.rAlchemist.util.Metrics;
 import ru.rulhot.rAlchemist.util.SchedulerUtil;
+import ru.rulhot.rAlchemist.util.UpdateChecker;
 import ru.rulhot.rAlchemist.util.logger.Logger;
 
 import java.util.List;
@@ -56,6 +57,9 @@ public final class RAlchemist extends JavaPlugin {
         configManager.apply(configManager.readAll());
         if (configManager.settings().metrics()) {
             metrics = new Metrics(this, BSTATS_ID);
+        }
+        if (configManager.settings().updateCheck()) {
+            new UpdateChecker(getPluginMeta().getVersion()).check();
         }
 
         PriceService priceService = new PriceService();

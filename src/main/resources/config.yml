@@ -1,16 +1,20 @@
 settings:
   debug: false
   metrics: true
+  update-check: true # сообщать в консоль о новой версии плагина
 
 command:
   main: alchemist
   aliases: [ alchemy ]
 
 # Плата за скрещивание. Можно несколько сразу: добавьте ещё один блок "- provider: ..."
+# provider: VAULT, BVAULT, COINSENGINE, PLAYERPOINTS
+# currency: для COINSENGINE - ID валюты, для BVAULT - название счёта (обычный счёт называется vault).
+# Для VAULT и PLAYERPOINTS currency не используется
 price:
   costs:
-    - provider: VAULT # VAULT, COINSENGINE, PLAYERPOINTS
-      currency: money # ID валюты, нужен только для COINSENGINE
+    - provider: VAULT
+      currency: money
       base: 3000 # базовая цена
       per-potion: 0 # доплата за каждое зелье
       per-effect: 250 # доплата за каждый эффект в результате
@@ -29,4 +33,4 @@ sounds:
     volume: 1.0
     pitch: 1.0
 
-config-version: 1 #не трогать!!!
+config-version: 2 #не трогать!!!

@@ -5,7 +5,9 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.papermc.io/repository/maven-public/") {
+        content { excludeGroupByRegex("org\\.by1337\\.bvault.*") }
+    }
     maven("https://repo.nightexpressdev.com/releases") {
         content { includeGroupByRegex("su\\.nightexpress.*") }
     }
@@ -15,6 +17,9 @@ repositories {
     maven("https://jitpack.io") {
         content { includeGroup("com.github.MilkBowl") }
     }
+    maven("https://repo.by1337.space/repository/maven-releases/") {
+        content { includeGroupByRegex("org\\.by1337\\.bvault.*") }
+    }
 }
 
 dependencies {
@@ -23,6 +28,7 @@ dependencies {
     compileOnly("com.zaxxer:HikariCP:6.2.1")
     compileOnly("org.apache.logging.log4j:log4j-core:2.25.3") { isTransitive = false }
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1") { isTransitive = false }
+    compileOnly("org.by1337.bvault.api:BVaultApi:1.1") { isTransitive = false }
     compileOnly("su.nightexpress.excellenteconomy:ExcellentEconomy:2.8.0") { isTransitive = false }
     compileOnly("org.black_ixx:playerpoints:3.3.4") { isTransitive = false }
 }

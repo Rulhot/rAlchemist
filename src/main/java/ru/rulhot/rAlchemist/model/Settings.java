@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
-public record Settings(boolean debug, boolean metrics, @NotNull Command command, @NotNull List<Cost> costs, @NotNull Mixing mixing,
+public record Settings(boolean debug, boolean metrics, boolean updateCheck, @NotNull Command command, @NotNull List<Cost> costs, @NotNull Mixing mixing,
                        @NotNull Failure failure, @NotNull Limits limits, @NotNull Levels levels,
                        @NotNull Sounds sounds, @NotNull Essence timeEssence, @NotNull Essence powerEssence,
                        @NotNull Essence stealthEssence, @NotNull Essence mysteryEssence,
@@ -50,6 +50,7 @@ public record Settings(boolean debug, boolean metrics, @NotNull Command command,
         return new Settings(
                 root.getBoolean("settings.debug", false),
                 root.getBoolean("settings.metrics", true),
+                root.getBoolean("settings.update-check", true),
                 new Command(name.isEmpty() ? DEFAULT_COMMAND : name, List.copyOf(root.getStringList("command.aliases"))),
                 costs(root.getMapList("price.costs")),
                 new Mixing(Math.max(1, mixing.getInt("min-potions", DEFAULT_MIN_POTIONS)),
@@ -261,6 +262,7 @@ public record Settings(boolean debug, boolean metrics, @NotNull Command command,
 
     public enum EconomyType {
         VAULT,
+        BVAULT,
         COINSENGINE,
         PLAYERPOINTS
     }

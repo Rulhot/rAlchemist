@@ -66,6 +66,7 @@ mix:
 price:
   free: "<#8CC77E>бесплатно"
   vault: "<#E6C15A>{amount} ⛃"
+  bvault: "<#E6C15A>{amount} ⛃"
   coinsengine: "<#E6C15A>{amount} {currency}"
   playerpoints: "<#8FB8DE>{amount} валюта."
 
@@ -82,4 +83,4 @@ color:
   input: "{prefix} <white>Введите команду <click:suggest_command:'/alchemist #'><#FF9A6C>/{command} #RRGGBB</#FF9A6C></click>, например <#FF9A6C>/{command} #FF8800</#FF9A6C>. Нажмите на команду, чтобы подставить её в чат."
   invalid: "{prefix} <white>Это <red>не похоже</red> на цвет в формате #RRGGBB, цвет не изменён."
 
-config-version: 1 #не трогать!!!
+config-version: 2 #не трогать!!!

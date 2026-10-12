@@ -81,12 +81,18 @@ public final class GiveSubCommand implements SubCommand {
             @NotNull CommandSender sender,
             @NotNull String[] args
     ) {
-        if (args.length < 1 || args.length > 2) {
-            return List.of();
+        switch (args.length) {
+            case 1: {
+                return SubCommand.suggest(Bukkit.getOnlinePlayers().stream().map(Player::getName), args);
+            }
+            case 2: {
+                return SubCommand.suggest(
+                        Arrays.stream(EssenceService.Type.values()).map(EssenceService.Type::id), args);
+            }
+            default: {
+                return List.of();
+            }
         }
-        return SubCommand.suggest(args.length == 1
-                ? Bukkit.getOnlinePlayers().stream().map(Player::getName)
-                : Arrays.stream(EssenceService.Type.values()).map(EssenceService.Type::id), args);
     }
 
     private @Nullable Integer parse(@NotNull String value) {
