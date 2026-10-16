@@ -2,10 +2,8 @@ package ru.rulhot.rAlchemist.manager;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -35,7 +33,7 @@ public final class ConfigManager {
     private static final Set<String> MENU_LIVE_PATHS = Set.of("buttons", "colors");
     private static final Set<String> LEVELS_LIVE_PATHS = Set.of("list");
     private static final String PREFIX_KEY = "prefix";
-    private static final NamedTextColor CONSOLE_PREFIX_COLOR = NamedTextColor.GOLD;
+    private static final String COMMAND_PLACEHOLDER = "{command}";
     private static final Pattern HEX_TAG = Pattern.compile("</?#[0-9a-fA-F]{6}>");
     private static final String LONG_DASH = String.valueOf((char) 0x2014);
     private static final Map<String, String> CONSOLE_SYMBOLS = Map.of("»", ">", LONG_DASH, "-", " ⛃", "", "▌", "|");
@@ -98,9 +96,8 @@ public final class ConfigManager {
 
     private @NotNull Component parse(@NotNull String raw, @NotNull TagResolver prefix,
                                      @NotNull Map<String, ?> placeholders) {
-        return MessageUtil.parseText(raw,
+        return MessageUtil.parseText(raw.replace(COMMAND_PLACEHOLDER, snapshot().settings().command().name()),
                 prefix,
-                Placeholder.unparsed("command", snapshot().settings().command().name()),
                 MessageUtil.placeholders(placeholders));
     }
 
@@ -125,10 +122,8 @@ public final class ConfigManager {
             audience.sendMessage(message(key, placeholders));
             return;
         }
-        String prefix = PlainTextComponentSerializer.plainText().serialize(
-                MessageUtil.parseText(snapshot().messages().getOrDefault(PREFIX_KEY, "")));
         audience.sendMessage(parse(consoleSafe(raw), Placeholder.component(PREFIX_KEY,
-                Component.text(consoleSafe(prefix), CONSOLE_PREFIX_COLOR)), placeholders));
+                Component.text("[" + plugin.getName() + "]")), placeholders));
     }
 
     private @NotNull String raw(@NotNull String key) {

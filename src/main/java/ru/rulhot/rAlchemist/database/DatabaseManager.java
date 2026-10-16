@@ -42,6 +42,8 @@ public final class DatabaseManager {
                     throw new SQLException("Не удалось создать папку " + folder.getAbsolutePath());
                 }
                 config.setJdbcUrl("jdbc:sqlite:" + new File(folder, SQLITE_FILE).getAbsolutePath());
+                config.addDataSourceProperty("journal_mode", "DELETE");
+                config.addDataSourceProperty("synchronous", "FULL");
                 config.addDataSourceProperty("busy_timeout", SQLITE_BUSY_TIMEOUT_MS);
             }
             case MYSQL -> {

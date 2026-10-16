@@ -34,7 +34,7 @@ public record DatabaseSettings(@NotNull Type type, @NotNull Pool pool, @NotNull 
         try {
             return Type.valueOf(raw.trim().toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException exception) {
-            Logger.warn("database.yml storage: неизвестное значение '" + raw + "', используется SQLITE");
+            Logger.warn("database.yml storage: неизвестное значение '" + raw + "', беру SQLITE");
             return Type.SQLITE;
         }
     }

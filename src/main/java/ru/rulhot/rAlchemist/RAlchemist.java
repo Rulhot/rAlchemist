@@ -64,7 +64,7 @@ public final class RAlchemist extends JavaPlugin {
 
         PriceService priceService = new PriceService();
         if (!priceService.reload(configManager.settings().costs(), getServer())) {
-            Logger.error("Не удалось подключить плату, rAlchemist выключен. Проверьте price.costs в config.yml");
+            Logger.error("Не удалось подключить плату, rAlchemist выключен. Проверь price.costs в config.yml");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }

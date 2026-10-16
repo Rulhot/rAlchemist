@@ -3,15 +3,13 @@ package ru.rulhot.rAlchemist.util.logger.impl;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jetbrains.annotations.NotNull;
 import ru.rulhot.rAlchemist.util.logger.ILogger;
 
 @RequiredArgsConstructor
 public final class LegacyLogger implements ILogger {
 
-    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
-    private static final String DEBUG_PREFIX = "<gray>[debug]</gray> ";
+    private static final String DEBUG_PREFIX = "[debug] ";
 
     private final @NotNull ComponentLogger logger;
 
@@ -40,7 +38,7 @@ public final class LegacyLogger implements ILogger {
         logger.info(parse(DEBUG_PREFIX + message));
     }
 
-    private @NotNull Component parse(@NotNull String message) {
-        return MINI_MESSAGE.deserialize(message);
+    private static @NotNull Component parse(@NotNull String message) {
+        return Component.text(message);
     }
 }

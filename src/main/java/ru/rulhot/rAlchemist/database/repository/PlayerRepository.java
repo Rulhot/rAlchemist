@@ -60,11 +60,19 @@ public final class PlayerRepository {
             TableUtils.createTableIfNotExists(source, PlayerRecord.class);
             current = DaoManager.createDao(source, PlayerRecord.class);
             dao = current;
+            Logger.info("Подключена база " + name(target.type()));
         } catch (SQLException exception) {
-            Logger.error("База данных недоступна, алхимик не откроется, пока она не заработает. "
-                    + "Следующая попытка - при следующем обращении игрока", exception);
+            Logger.error("Не удалось подключить базу " + name(target.type()) + ", алхимик не откроется. "
+                    + "Проверь database.yml, повторю при следующем входе игрока", exception);
         }
         return current;
+    }
+
+    private static @NotNull String name(@NotNull DatabaseSettings.Type type) {
+        return switch (type) {
+            case SQLITE -> "SQLite";
+            case MYSQL -> "MySQL";
+        };
     }
 
     public @Nullable PlayerData get(@NotNull UUID uuid) {
@@ -114,7 +122,7 @@ public final class PlayerRepository {
         executor.shutdown();
         try {
             if (!executor.awaitTermination(SHUTDOWN_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
-                Logger.error("Сохранение данных игроков не завершилось за " + SHUTDOWN_TIMEOUT_SECONDS + " с");
+                Logger.error("Не удалось сохранить данные игроков за " + SHUTDOWN_TIMEOUT_SECONDS + "с при выключении");
                 executor.shutdownNow();
             }
         } catch (InterruptedException exception) {

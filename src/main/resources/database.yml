@@ -1,4 +1,4 @@
-storage: sqlite # mysql
+storage: sqlite # sqlite или mysql
 
 mysql:
   host: localhost
@@ -7,4 +7,4 @@ mysql:
   user: "root"
   password: ""
 
-config-version: 1 #не трогать!!!
+config-version: 2 #не трогать!!!

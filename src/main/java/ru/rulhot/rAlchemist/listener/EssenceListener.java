@@ -16,7 +16,7 @@ public final class EssenceListener implements Listener {
 
     private static final int ESSENCES_PER_USE = 1;
 
-    private final EssenceService essences;
+    private final @NotNull EssenceService essences;
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPrepare(@NotNull PrepareAnvilEvent event) {

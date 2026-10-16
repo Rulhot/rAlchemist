@@ -27,6 +27,12 @@ public final class SchedulerUtil {
         entity.getScheduler().run(plugin, guarded(task), null);
     }
 
+    public void runFor(@NotNull Entity entity, @NotNull Runnable task, @NotNull Runnable retired) {
+        if (entity.getScheduler().run(plugin, guarded(task), retired) == null) {
+            retired.run();
+        }
+    }
+
     public void cancelAll() {
         Bukkit.getGlobalRegionScheduler().cancelTasks(plugin);
         Bukkit.getAsyncScheduler().cancelTasks(plugin);

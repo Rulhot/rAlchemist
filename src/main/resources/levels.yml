@@ -1,4 +1,4 @@
-points-per-mix: 10 # очки за одно успешное скрещивание
+points-per-mix: 10 # очки за успешное скрещивание
 
 list:
   1:
@@ -27,4 +27,4 @@ list:
     discount: 20
     fail-reduction: 25
 
-config-version: 1 #не трогать!!!
+config-version: 2 #не трогать!!!

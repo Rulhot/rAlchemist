@@ -121,7 +121,7 @@ public record Settings(boolean debug, boolean metrics, boolean updateCheck, @Not
                             percent(section.get(key + ".discount"), context + ".discount"),
                             percent(section.get(key + ".fail-reduction"), context + ".fail-reduction")));
                 } catch (NumberFormatException exception) {
-                    Logger.warn(context + ": номер уровня должен быть числом, уровень пропущен");
+                    Logger.warn(context + ": номер уровня должен быть числом, пропускаю");
                 }
             }
         }
@@ -153,7 +153,7 @@ public record Settings(boolean debug, boolean metrics, boolean updateCheck, @Not
         for (String name : raw) {
             PotionEffectType type = effectType(name);
             if (type == null) {
-                Logger.warn("items.yml " + path + ": неизвестный эффект '" + name + "', пропущен");
+                Logger.warn("items.yml " + path + ": неизвестный эффект '" + name + "', пропускаю");
                 continue;
             }
             effects.add(type);
@@ -167,7 +167,7 @@ public record Settings(boolean debug, boolean metrics, boolean updateCheck, @Not
             String[] parts = entry.trim().split(":");
             PotionEffectType type = parts.length == SPOILED_EFFECT_PARTS ? effectType(parts[0]) : null;
             if (type == null) {
-                Logger.warn("items.yml spoiled-potion.effects: '" + entry + "' должно быть эффект:уровень:секунды, пропущено");
+                Logger.warn("items.yml spoiled-potion.effects: '" + entry + "' должно быть эффект:уровень:секунды, пропускаю");
                 continue;
             }
             try {
@@ -175,7 +175,7 @@ public record Settings(boolean debug, boolean metrics, boolean updateCheck, @Not
                         Math.max(1, Integer.parseInt(parts[2].trim())) * TICKS_PER_SECOND,
                         Math.clamp(Integer.parseInt(parts[1].trim()), 1, MAX_EFFECT_LEVEL) - 1));
             } catch (NumberFormatException exception) {
-                Logger.warn("items.yml spoiled-potion.effects: в '" + entry + "' уровень и секунды должны быть числами, пропущено");
+                Logger.warn("items.yml spoiled-potion.effects: в '" + entry + "' уровень и секунды должны быть числами, пропускаю");
             }
         }
         return List.copyOf(effects);
@@ -188,13 +188,13 @@ public record Settings(boolean debug, boolean metrics, boolean updateCheck, @Not
             for (Object name : entry instanceof List<?> list ? list : List.of(entry)) {
                 PotionEffectType type = effectType(String.valueOf(name));
                 if (type == null) {
-                    Logger.warn("mixing.yml incompatible: неизвестный эффект '" + name + "', пропущен");
+                    Logger.warn("mixing.yml incompatible: неизвестный эффект '" + name + "', пропускаю");
                     continue;
                 }
                 group.add(type);
             }
             if (group.size() < 2) {
-                Logger.warn("mixing.yml incompatible: в группе " + entry + " меньше двух эффектов, пропущена");
+                Logger.warn("mixing.yml incompatible: в группе " + entry + " меньше двух эффектов, пропускаю");
                 continue;
             }
             groups.add(Set.copyOf(group));
@@ -221,7 +221,7 @@ public record Settings(boolean debug, boolean metrics, boolean updateCheck, @Not
         try {
             return Double.parseDouble(String.valueOf(raw).trim().replace(',', '.'));
         } catch (NumberFormatException exception) {
-            Logger.warn(context + ": '" + raw + "' не число, используется " + fallback);
+            Logger.warn(context + ": '" + raw + "' не число, беру " + fallback);
             return fallback;
         }
     }
@@ -246,7 +246,7 @@ public record Settings(boolean debug, boolean metrics, boolean updateCheck, @Not
         try {
             return EconomyType.valueOf(String.valueOf(raw).trim().toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException exception) {
-            Logger.warn("config.yml price.costs: неизвестный provider '" + raw + "', используется VAULT");
+            Logger.warn("config.yml price.costs: неизвестный provider '" + raw + "', беру VAULT");
             return EconomyType.VAULT;
         }
     }
@@ -255,7 +255,7 @@ public record Settings(boolean debug, boolean metrics, boolean updateCheck, @Not
         try {
             return FailMode.valueOf(String.valueOf(raw).trim().toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException exception) {
-            Logger.warn("mixing.yml failure.mode: неизвестное значение '" + raw + "', используется BURN");
+            Logger.warn("mixing.yml failure.mode: неизвестное значение '" + raw + "', беру BURN");
             return FailMode.BURN;
         }
     }

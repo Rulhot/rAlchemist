@@ -10,6 +10,7 @@ import ru.rulhot.rAlchemist.manager.ConfigManager;
 import ru.rulhot.rAlchemist.menu.MenuManager;
 import ru.rulhot.rAlchemist.service.PriceService;
 import ru.rulhot.rAlchemist.util.SchedulerUtil;
+import ru.rulhot.rAlchemist.util.logger.Logger;
 
 @RequiredArgsConstructor
 public final class ReloadSubCommand implements SubCommand {
@@ -41,7 +42,14 @@ public final class ReloadSubCommand implements SubCommand {
             return true;
         }
         scheduler.runAsync(() -> {
-            ConfigManager.Bundle bundle = config.readAll();
+            ConfigManager.Bundle bundle;
+            try {
+                bundle = config.readAll();
+            } catch (RuntimeException exception) {
+                Logger.error("Не удалось прочитать конфиги, оставляю прежние", exception);
+                config.send(sender, "reload.failed");
+                return;
+            }
             scheduler.runGlobal(() -> apply(sender, bundle));
         });
         return true;
@@ -49,7 +57,13 @@ public final class ReloadSubCommand implements SubCommand {
 
     private void apply(@NotNull CommandSender sender, @NotNull ConfigManager.Bundle bundle) {
         menuManager.closeAll();
-        config.apply(bundle);
+        try {
+            config.apply(bundle);
+        } catch (RuntimeException exception) {
+            Logger.error("Не удалось применить конфиги, оставляю прежние", exception);
+            config.send(sender, "reload.failed");
+            return;
+        }
         if (!prices.reload(config.settings().costs(), server)) {
             config.send(sender, "reload.economy-failed");
         }

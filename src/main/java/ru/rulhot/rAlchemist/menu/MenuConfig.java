@@ -36,7 +36,7 @@ public record MenuConfig(
     public static @NotNull MenuConfig parse(@NotNull String file, @NotNull ConfigurationSection root) {
         int size = root.getInt("size", MAX_SIZE);
         if (size % ROW_SIZE != 0 || size < ROW_SIZE || size > MAX_SIZE) {
-            Logger.warn(file + ": size должен быть 9, 18, ..., 54, используется " + MAX_SIZE);
+            Logger.warn(file + ": size должен быть 9, 18, ..., 54, ставлю " + MAX_SIZE);
             size = MAX_SIZE;
         }
         Set<Integer> inputSlots = parseSlots(root.getList("input-slots", List.of()), size, file + " input-slots");
@@ -64,7 +64,7 @@ public record MenuConfig(
                 ConfigurationSection section = colorSection.getConfigurationSection(key);
                 Color color = section == null ? null : ColorService.parseHex(section.getString("color"));
                 if (color == null) {
-                    Logger.warn(context + ": color должен быть в формате #RRGGBB, цвет пропущен");
+                    Logger.warn(context + ": color должен быть в формате #RRGGBB, пропускаю");
                     continue;
                 }
                 PotionColor potionColor = new PotionColor(key, section.getString("name", key), color);
@@ -118,7 +118,7 @@ public record MenuConfig(
         if (used.add(slot)) {
             return true;
         }
-        Logger.warn(context + ": слот " + slot + " уже занят, пропущен");
+        Logger.warn(context + ": слот " + slot + " уже занят, пропускаю");
         return false;
     }
 
@@ -154,13 +154,13 @@ public record MenuConfig(
                 int to = Math.max(first, second);
                 if (from < 0 || to >= size) {
                     Logger.warn(context + ": слоты " + from + "-" + to + " выходят за 0-" + (size - 1)
-                            + ", лишние пропущены");
+                            + ", лишние пропускаю");
                 }
                 for (int slot = Math.max(0, from); slot <= Math.min(to, size - 1); slot++) {
                     result.add(slot);
                 }
             } catch (NumberFormatException exception) {
-                Logger.warn(context + ": неверный слот '" + text + "', пропущен");
+                Logger.warn(context + ": неверный слот '" + text + "', пропускаю");
             }
         }
         return result;

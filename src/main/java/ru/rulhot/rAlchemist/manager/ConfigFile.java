@@ -39,7 +39,7 @@ public class ConfigFile {
         try {
             current.load(target);
         } catch (IOException | InvalidConfigurationException exception) {
-            Logger.error("Ошибка в " + path + ", до исправления файла используются значения по умолчанию", exception);
+            Logger.error("Ошибка в " + path + ", беру значения по умолчанию. Исправь файл и перезагрузи конфиг", exception);
             return defaults != null ? defaults : current;
         }
         if (defaults == null) {
@@ -55,8 +55,7 @@ public class ConfigFile {
         try {
             Files.copy(file, file.resolveSibling(backupName), StandardCopyOption.REPLACE_EXISTING);
             writeAtomically(file, merged.saveToString());
-            Logger.info("Файл " + path + " обновлён: добавлены новые ключи, ваши значения сохранены, прежняя версия — "
-                    + backupName);
+            Logger.info("Обновлён " + path + ": добавлены новые ключи, копия старого файла в " + backupName);
         } catch (IOException exception) {
             Logger.error("Не удалось сохранить обновлённый " + path, exception);
         }
@@ -120,7 +119,7 @@ public class ConfigFile {
     private @Nullable YamlConfiguration readDefaults(@NotNull JavaPlugin plugin, @NotNull String path) {
         try (InputStream stream = plugin.getResource(path)) {
             if (stream == null) {
-                Logger.error("В jar плагина нет файла " + path + ", пересоберите плагин");
+                Logger.error("В jar плагина нет файла " + path + ", пересобери плагин");
                 return null;
             }
             return YamlConfiguration.loadConfiguration(new InputStreamReader(stream, StandardCharsets.UTF_8));

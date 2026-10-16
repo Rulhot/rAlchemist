@@ -1,5 +1,5 @@
 name: rAlchemist
-version: '1.1'
+version: '1.2'
 main: ru.rulhot.rAlchemist.RAlchemist
 api-version: '1.21.4'
 folia-supported: true

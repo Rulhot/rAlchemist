@@ -82,6 +82,10 @@ public final class PriceService {
         return true;
     }
 
+    public void refund(@NotNull Player player, @NotNull List<Charge> charges) {
+        charges.forEach(charge -> charge.payment().provider().deposit(player, charge.amount()));
+    }
+
     public record Payment(@NotNull Settings.Cost cost, @NotNull EconomyProvider provider) {
     }
 

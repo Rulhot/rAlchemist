@@ -36,7 +36,8 @@ public class EconomyRegistry {
                 case PLAYERPOINTS -> new PlayerPointsEconomyProvider(PlayerPoints.getInstance().getAPI());
             };
         } catch (Throwable throwable) {
-            Logger.error("Не удалось подключиться к экономике " + pluginName + ", возможно, несовместимая версия", throwable);
+            Logger.error("Не удалось подключить экономику " + pluginName + ". Проверь, что версия плагина подходит",
+                    throwable);
             return null;
         }
     }
@@ -78,7 +79,7 @@ public class EconomyRegistry {
         }
         ExcellentEconomyAPI api = registration.getProvider();
         if (!api.hasCurrency(currency)) {
-            Logger.error("В CoinsEngine нет валюты '" + currency + "', проверьте currency в price.costs");
+            Logger.error("В CoinsEngine нет валюты '" + currency + "', проверь currency в price.costs");
             return null;
         }
         return new CoinsEngineEconomyProvider(api, currency);

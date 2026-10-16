@@ -22,7 +22,7 @@ public record ItemTemplate(@NotNull ItemStack base, @Nullable String name, @NotN
         String materialName = section.getString("material", "STONE");
         Material material = Material.matchMaterial(materialName);
         if (material == null || material.isAir() || !material.isItem()) {
-            Logger.warn(context + ": неизвестный материал '" + materialName + "', предмет пропущен");
+            Logger.warn(context + ": неизвестный материал '" + materialName + "', пропускаю");
             return null;
         }
         List<ItemFlag> flags = new ArrayList<>();
@@ -30,7 +30,7 @@ public record ItemTemplate(@NotNull ItemStack base, @Nullable String name, @NotN
             try {
                 flags.add(ItemFlag.valueOf(flag.trim().toUpperCase(Locale.ROOT)));
             } catch (IllegalArgumentException exception) {
-                Logger.warn(context + ": неизвестный item-flag '" + flag + "', пропущен");
+                Logger.warn(context + ": неизвестный item-flag '" + flag + "', пропускаю");
             }
         }
         boolean glow = section.getBoolean("glow", false);

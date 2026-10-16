@@ -34,6 +34,9 @@ public final class MenuHolder implements InventoryHolder {
     private boolean resultReady;
     @Getter
     private boolean returned;
+    @Getter
+    @Setter
+    private boolean paying;
     private boolean refreshQueued;
     private long lastClick;
 

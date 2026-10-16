@@ -80,7 +80,7 @@ public final class MenuManager {
     }
 
     public void handleClick(@NotNull InventoryClickEvent event, @NotNull MenuHolder holder) {
-        if (!(event.getWhoClicked() instanceof Player player)) {
+        if (!(event.getWhoClicked() instanceof Player player) || holder.isPaying()) {
             event.setCancelled(true);
             return;
         }
@@ -158,6 +158,10 @@ public final class MenuManager {
     }
 
     public void handleDrag(@NotNull InventoryDragEvent event, @NotNull MenuHolder holder) {
+        if (holder.isPaying()) {
+            event.setCancelled(true);
+            return;
+        }
         MenuConfig menu = holder.getConfig();
         boolean editable = holder.getView() == MenuHolder.View.MAIN;
         boolean touched = false;
@@ -359,22 +363,28 @@ public final class MenuManager {
         if (holder.getView() != MenuHolder.View.MAIN) {
             return;
         }
+        if (holder.isPaying()) {
+            config.send(player, "mix.busy");
+            return;
+        }
         Settings settings = config.settings();
         Quote quote = quote(player, holder, level(player));
-        MixService.Result.Failure failure = tryMix(player, holder, settings, quote);
-        if (failure == null) {
+        MixService.Result.Failure denied = check(player, holder, settings, quote);
+        if (denied != null) {
+            fail(player, settings, quote, denied);
             refresh(player, holder);
             return;
         }
-        play(player, settings.sounds().mixFail());
-        Map<String, Object> placeholders = new HashMap<>(failure.placeholders());
-        placeholders.put("price", price(quote.charges()));
-        config.send(player, failure.messageKey(), placeholders);
-        refresh(player, holder);
+        holder.setPaying(true);
+        scheduler.runAsync(() -> {
+            MixService.Result.Failure paid = pay(player, quote.charges());
+            scheduler.runFor(player, () -> finish(player, holder, settings, quote, paid),
+                    () -> refund(player, quote, paid));
+        });
     }
 
-    private @Nullable MixService.Result.Failure tryMix(@NotNull Player player, @NotNull MenuHolder holder,
-                                                       @NotNull Settings settings, @NotNull Quote quote) {
+    private @Nullable MixService.Result.Failure check(@NotNull Player player, @NotNull MenuHolder holder,
+                                                      @NotNull Settings settings, @NotNull Quote quote) {
         if (!player.hasPermission(PERMISSION_USE)) {
             return new MixService.Result.Failure("no-permission", Map.of());
         }
@@ -384,16 +394,53 @@ public final class MenuManager {
         if (quote.result() instanceof MixService.Result.Failure failure) {
             return failure;
         }
-        MixService.Result.Failure denied = progress.check(player, settings.limits());
-        if (denied != null) {
-            return denied;
-        }
-        if (!prices.has(player, quote.charges())) {
+        return progress.check(player, settings.limits());
+    }
+
+    private @Nullable MixService.Result.Failure pay(@NotNull Player player,
+                                                    @NotNull List<PriceService.Charge> charges) {
+        if (!prices.has(player, charges)) {
             return new MixService.Result.Failure("mix.not-enough-money", Map.of());
         }
-        if (!prices.withdraw(player, quote.charges())) {
+        if (!prices.withdraw(player, charges)) {
             return new MixService.Result.Failure("mix.economy-error", Map.of());
         }
+        return null;
+    }
+
+    private void refund(@NotNull Player player, @NotNull Quote quote, @Nullable MixService.Result.Failure paid) {
+        if (paid == null) {
+            scheduler.runAsync(() -> prices.refund(player, quote.charges()));
+        }
+    }
+
+    private void finish(@NotNull Player player, @NotNull MenuHolder holder, @NotNull Settings settings,
+                        @NotNull Quote quote, @Nullable MixService.Result.Failure paid) {
+        holder.setPaying(false);
+        if (paid != null) {
+            fail(player, settings, quote, paid);
+            refresh(player, holder);
+            return;
+        }
+        if (holder.isReturned()) {
+            refund(player, quote, null);
+            config.send(player, "mix.cancelled");
+            return;
+        }
+        complete(player, holder, settings, quote);
+        refresh(player, holder);
+    }
+
+    private void fail(@NotNull Player player, @NotNull Settings settings, @NotNull Quote quote,
+                      @NotNull MixService.Result.Failure failure) {
+        play(player, settings.sounds().mixFail());
+        Map<String, Object> placeholders = new HashMap<>(failure.placeholders());
+        placeholders.put("price", price(quote.charges()));
+        config.send(player, failure.messageKey(), placeholders);
+    }
+
+    private void complete(@NotNull Player player, @NotNull MenuHolder holder, @NotNull Settings settings,
+                          @NotNull Quote quote) {
         MixService.Result.Success success = (MixService.Result.Success) quote.result();
         Inventory inventory = holder.getInventory();
         holder.getInputSlots().forEach(slot -> inventory.setItem(slot, null));
@@ -411,7 +458,7 @@ public final class MenuManager {
             } else {
                 config.send(player, "mix.burned", placeholders);
             }
-            return null;
+            return;
         }
         deliver(player, holder, success.potion());
         play(player, settings.sounds().mixSuccess());
@@ -421,7 +468,6 @@ public final class MenuManager {
         if (reached.xp() > quote.level().xp()) {
             config.send(player, "level.up", Map.of("level", reached.number()));
         }
-        return null;
     }
 
     private void deliver(@NotNull Player player, @NotNull MenuHolder holder, @NotNull ItemStack potion) {
